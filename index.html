@@ -2,28 +2,85 @@
 <html>
 <head>
   <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+  <title>Proiectio | Realidad Aumentada (Beta)</title>
+  <!-- A-Frame -->
   <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
+  <!-- AR.js con soporte para Marcadores de Código de Barras (Matrix) -->
   <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
 </head>
-<body style="margin : 0px; overflow: hidden;">
-  <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
+<body style="margin: 0; overflow: hidden;">
+  
+  <!-- Escena AR configurada para detectar Códigos de Barras 3x3 -->
+  <a-scene 
+    embedded 
+    arjs="sourceType: webcam; debugUIEnabled: false; detectionMode: mono_and_matrix; matrixCodeType: 3x3;"
+    renderer="logarithmicDepthBuffer: true;"
+    vr-mode-ui="enabled: false">
     
-    <a-assets>
-      <a-asset-item id="foxModel" src="https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Fox/glTF-Binary/Fox.glb"></a-asset-item>
-    </a-assets>
-
-    <!-- MARCADOR 1: La Portada (Marcador Hiro) -->
-    <!-- Al enfocar este, veremos al Zorro 3D -->
-    <a-marker preset="hiro">
-      <a-gltf-model position="0 0 0" scale="0.05 0.05 0.05" src="#foxModel" animation="property: rotation; to: 0 360 0; loop: true; dur: 5000"></a-gltf-model>
+    <!-- ============================================== -->
+    <!-- CAPÍTULO 1 (Marcador de Código de Barras: 1)   -->
+    <!-- Placeholder: Cubo Rojo                         -->
+    <!-- ============================================== -->
+    <a-marker type="barcode" value="1">
+      <!-- Este cubo rojo será reemplazado luego por Elías Vance -->
+      <a-box position="0 0.5 0" color="#FF0000" material="opacity: 0.8; transparent: true"
+             animation="property: rotation; to: 0 360 0; loop: true; dur: 5000"></a-box>
+      <a-text value="CAPITULO 1" position="-0.5 1.5 0" color="#FF0000"></a-text>
     </a-marker>
 
-    <!-- MARCADOR 2: Capítulo Interior (Marcador Kanji) -->
-    <!-- Al enfocar este, veremos un Cubo Azul que podría ser otro personaje -->
-    <a-marker preset="kanji">
-      <a-box position="0 0.5 0" color="#0044ff" material="opacity: 0.8" animation="property: rotation; to: 0 360 0; loop: true; dur: 2000"></a-box>
+    <!-- ============================================== -->
+    <!-- CAPÍTULO 2 (Marcador de Código de Barras: 2)   -->
+    <!-- Placeholder: Esfera Azul                       -->
+    <!-- ============================================== -->
+    <a-marker type="barcode" value="2">
+      <!-- Este será el placeholder para el Cap 2 -->
+      <a-sphere position="0 0.5 0" radius="0.5" color="#0000FF" material="opacity: 0.8"
+                animation="property: position; dir: alternate; dur: 1000; to: 0 1 0; loop: true"></a-sphere>
+      <a-text value="CAPITULO 2" position="-0.5 1.5 0" color="#0000FF"></a-text>
     </a-marker>
-    
+
+    <!-- ============================================== -->
+    <!-- CAPÍTULO 3 (Marcador de Código de Barras: 3)   -->
+    <!-- Placeholder: Cilindro Verde                    -->
+    <!-- ============================================== -->
+    <a-marker type="barcode" value="3">
+      <!-- Este será el placeholder para el Cap 3 -->
+      <a-cylinder position="0 0.5 0" radius="0.5" height="1" color="#00FF00" material="opacity: 0.8"
+                  animation="property: rotation; to: 360 360 0; loop: true; dur: 4000"></a-cylinder>
+      <a-text value="CAPITULO 3" position="-0.5 1.5 0" color="#00FF00"></a-text>
+    </a-marker>
+
+    <!-- ============================================== -->
+    <!-- CAPÍTULO 4 (Marcador de Código de Barras: 4)   -->
+    <!-- Placeholder: Cono Amarillo                     -->
+    <!-- ============================================== -->
+    <a-marker type="barcode" value="4">
+      <a-cone position="0 0.5 0" radius-bottom="0.5" height="1" color="#FFFF00" material="opacity: 0.8"
+              animation="property: rotation; to: 0 -360 0; loop: true; dur: 3000"></a-cone>
+      <a-text value="CAPITULO 4" position="-0.5 1.5 0" color="#FFFF00"></a-text>
+    </a-marker>
+
+    <!-- ============================================== -->
+    <!-- CAPÍTULO 5 (Marcador de Código de Barras: 5)   -->
+    <!-- Placeholder: Toroide Morado                    -->
+    <!-- ============================================== -->
+    <a-marker type="barcode" value="5">
+      <a-torus position="0 0.5 0" radius="0.5" radius-tubular="0.1" color="#800080" material="opacity: 0.8"
+               animation="property: rotation; to: 360 0 360; loop: true; dur: 4000"></a-torus>
+      <a-text value="CAPITULO 5" position="-0.5 1.5 0" color="#800080"></a-text>
+    </a-marker>
+
+    <!-- ============================================== -->
+    <!-- CAPÍTULO 6 (Marcador de Código de Barras: 6)   -->
+    <!-- Placeholder: Dodecaedro Cyan                   -->
+    <!-- ============================================== -->
+    <a-marker type="barcode" value="6">
+      <a-dodecahedron position="0 0.5 0" radius="0.5" color="#00FFFF" material="opacity: 0.8"
+                      animation="property: scale; dir: alternate; dur: 1000; to: 1.2 1.2 1.2; loop: true"></a-dodecahedron>
+      <a-text value="CAPITULO 6" position="-0.5 1.5 0" color="#00FFFF"></a-text>
+    </a-marker>
+
+    <!-- La cámara que ve el mundo real -->
     <a-entity camera></a-entity>
   </a-scene>
 </body>
