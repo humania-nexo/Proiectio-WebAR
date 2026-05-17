@@ -249,16 +249,17 @@
 
   <script>
     // --- COMPONENTE CUSTOM DE A-FRAME PARA ROTACIÓN TÁCTIL (DRAG ROTATE) ---
+    // Optimizado para no bloquear la carga inicial y ser compatible con móviles
     AFRAME.registerComponent('drag-rotate', {
       schema: {
-        speed: { type: 'number', default: 1.5 }
+        speed: { type: 'number', default: 1.0 }
       },
       init: function() {
         this.ifMouseDown = false;
         this.x_coords = 0;
         this.y_coords = 0;
         
-        // Bindeamos el contexto actual 'this' a los event handlers
+        // Bindeamos los event handlers
         this.OnDocumentMouseDown = this.OnDocumentMouseDown.bind(this);
         this.OnDocumentMouseMove = this.OnDocumentMouseMove.bind(this);
         this.OnDocumentMouseUp = this.OnDocumentMouseUp.bind(this);
@@ -266,15 +267,14 @@
         this.OnDocumentTouchMove = this.OnDocumentTouchMove.bind(this);
         this.OnDocumentTouchEnd = this.OnDocumentTouchEnd.bind(this);
 
-        // PC Events
-        document.addEventListener('mousedown', this.OnDocumentMouseDown);
-        document.addEventListener('mousemove', this.OnDocumentMouseMove);
-        document.addEventListener('mouseup', this.OnDocumentMouseUp);
+        // Listeners globales en window para máxima fiabilidad
+        window.addEventListener('mousedown', this.OnDocumentMouseDown);
+        window.addEventListener('mousemove', this.OnDocumentMouseMove);
+        window.addEventListener('mouseup', this.OnDocumentMouseUp);
         
-        // Mobile Events
-        document.addEventListener('touchstart', this.OnDocumentTouchStart, { passive: false });
-        document.addEventListener('touchmove', this.OnDocumentTouchMove, { passive: false });
-        document.addEventListener('touchend', this.OnDocumentTouchEnd);
+        window.addEventListener('touchstart', this.OnDocumentTouchStart);
+        window.addEventListener('touchmove', this.OnDocumentTouchMove);
+        window.addEventListener('touchend', this.OnDocumentTouchEnd);
       },
       OnDocumentMouseDown: function(event) {
         this.ifMouseDown = true;
@@ -282,16 +282,13 @@
         this.y_coords = event.clientY;
       },
       OnDocumentMouseMove: function(event) {
-        if (this.ifMouseDown) {
-          // Desplazamiento del mouse en píxeles
+        if (this.ifMouseDown && this.el.object3D) {
           const temp_x = event.clientX - this.x_coords;
           const temp_y = event.clientY - this.y_coords;
           
-          // Rotar horizontalmente (eje Y) y verticalmente (eje X)
-          this.el.object3D.rotation.y += temp_x * this.data.speed * 0.005;
-          this.el.object3D.rotation.x += temp_y * this.data.speed * 0.005;
+          this.el.object3D.rotation.y += temp_x * this.data.speed * 0.01;
+          this.el.object3D.rotation.x += temp_y * this.data.speed * 0.01;
           
-          // Guardar coordenadas actuales
           this.x_coords = event.clientX;
           this.y_coords = event.clientY;
         }
@@ -307,15 +304,12 @@
         }
       },
       OnDocumentTouchMove: function(event) {
-        // Prevenir scroll de la página para que la experiencia AR no rebote
-        if (event.cancelable) event.preventDefault();
-        
-        if (this.ifMouseDown && event.touches.length === 1) {
+        if (this.ifMouseDown && event.touches.length === 1 && this.el.object3D) {
           const temp_x = event.touches[0].clientX - this.x_coords;
           const temp_y = event.touches[0].clientY - this.y_coords;
           
-          this.el.object3D.rotation.y += temp_x * this.data.speed * 0.005;
-          this.el.object3D.rotation.x += temp_y * this.data.speed * 0.005;
+          this.el.object3D.rotation.y += temp_x * this.data.speed * 0.01;
+          this.el.object3D.rotation.x += temp_y * this.data.speed * 0.01;
           
           this.x_coords = event.touches[0].clientX;
           this.y_coords = event.touches[0].clientY;
@@ -325,13 +319,12 @@
         this.ifMouseDown = false;
       },
       remove: function() {
-        // Limpieza de event listeners al destruir el componente
-        document.removeEventListener('mousedown', this.OnDocumentMouseDown);
-        document.removeEventListener('mousemove', this.OnDocumentMouseMove);
-        document.removeEventListener('mouseup', this.OnDocumentMouseUp);
-        document.removeEventListener('touchstart', this.OnDocumentTouchStart);
-        document.removeEventListener('touchmove', this.OnDocumentTouchMove);
-        document.removeEventListener('touchend', this.OnDocumentTouchEnd);
+        window.removeEventListener('mousedown', this.OnDocumentMouseDown);
+        window.removeEventListener('mousemove', this.OnDocumentMouseMove);
+        window.removeEventListener('mouseup', this.OnDocumentMouseUp);
+        window.removeEventListener('touchstart', this.OnDocumentTouchStart);
+        window.removeEventListener('touchmove', this.OnDocumentTouchMove);
+        window.removeEventListener('touchend', this.OnDocumentTouchEnd);
       }
     });
   </script>
@@ -372,17 +365,14 @@
   </div>
 
   <!-- ESCENA AR.JS CONFIGURADA PARA DETECTAR CÓDIGOS DE BARRAS 3x3 -->
+  <!-- Usamos la configuración de renderizado original para máxima compatibilidad -->
   <a-scene 
     embedded 
     arjs="sourceType: webcam; debugUIEnabled: false; detectionMode: mono_and_matrix; matrixCodeType: 3x3;"
-    renderer="logarithmicDepthBuffer: true; antialias: true;"
+    renderer="logarithmicDepthBuffer: true;"
     vr-mode-ui="enabled: false">
     
-    <!-- 1. CARGA DE MODELOS 3D EN SEGUNDO PLANO -->
-    <a-assets>
-      <!-- Modelo de la Barra Solaris Citrus (Capítulo 1) -->
-      <a-asset-item id="modeloSolaris" src="modelos/solaris_citrus.glb"></a-asset-item>
-    </a-assets>
+    <!-- NOTA: Eliminamos la pre-carga obligatoria de <a-assets> para evitar que bloquee la inicialización de la cámara AR en móviles si el modelo de 8MB tarda en descargar. El modelo cargará de forma asíncrona directamente en el marcador. -->
     
     <!-- ========================================================== -->
     <!-- CAPÍTULO 1 (Marcador de Código de Barras: 1)                -->
@@ -390,19 +380,19 @@
     <!-- ========================================================== -->
     <a-marker type="barcode" value="1">
       <!-- 
-        Cargamos el modelo 3D de la barra Solaris.
-        - position: elevado un poco del marcador (0 0.4 0)
-        - scale: ajustamos la escala inicial (0.5 0.5 0.5) para que quepa bien en pantalla. Modificar si es necesario.
-        - drag-rotate: activa el componente custom para girar con deslizamientos.
+        Cargamos el modelo 3D de la barra Solaris directamente.
+        - position: elevado un poco del marcador
+        - scale: ajustado para visualización
+        - drag-rotate: activa el componente custom para girar
       -->
       <a-gltf-model 
-        src="#modeloSolaris" 
+        src="modelos/solaris_citrus.glb" 
         position="0 0.4 0" 
         scale="0.6 0.6 0.6"
         drag-rotate>
       </a-gltf-model>
       
-      <!-- Pequeño anillo holográfico en la base del marcador -->
+      <!-- Anillo holográfico en la base del marcador -->
       <a-ring color="#00ff00" radius-inner="0.6" radius-outer="0.7" rotation="-90 0 0"
               material="opacity: 0.5; transparent: true"></a-ring>
       
