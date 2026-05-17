@@ -401,16 +401,69 @@
 
     <!-- ========================================================== -->
     <!-- CAPÍTULO 2 (Marcador de Código de Barras: 2)                -->
-    <!-- Placeholder: Esfera Holográfica Gigante                   -->
+    <!-- Modelo Deltar GLB y Leyenda Hologrática DELTAR            -->
     <!-- ========================================================== -->
     <a-marker type="barcode" value="2">
-      <a-sphere 
-        position="0 0.3 0" 
-        radius="0.6" 
-        color="#0000FF" 
-        material="opacity: 0.6; wireframe: true; transparent: true"
+      <!-- Módulo del Modelo 3D de Deltar -->
+      <a-gltf-model 
+        src="modelos/deltar.glb" 
+        position="0 0.05 0" 
+        scale="1.0 1.0 1.0"
+        rotation="0 0 0"
         drag-rotate>
-      </a-sphere>
+      </a-gltf-model>
+
+      <!-- Anillo holográfico de escaneo en la base -->
+      <a-ring 
+        color="#00ff00" 
+        radius-inner="0.75" 
+        radius-outer="0.78" 
+        rotation="-90 0 0" 
+        position="0 0.02 0"
+        material="opacity: 0.6; transparent: true; side: double"
+        animation="property: scale; to: 1.15 1.15 1.15; dur: 2500; dir: alternate; loop: true; easing: easeInOutSine">
+      </a-ring>
+
+      <!-- Leyenda DELTAR con estética Holográfica y Glitch de 3D -->
+      <a-entity position="0 1.4 0" scale="0.8 0.8 0.8">
+        <!-- Fondo translúcido -->
+        <a-plane 
+          color="#050505" 
+          width="1.6" 
+          height="0.4" 
+          material="opacity: 0.75; transparent: true; side: double">
+        </a-plane>
+        <!-- Borde decorativo de Neon Azul -->
+        <a-ring 
+          color="#00c3ff" 
+          radius-inner="0.8" 
+          radius-outer="0.81" 
+          material="opacity: 0.8; transparent: true; side: double"
+          scale="1 0.25 1"
+          position="0 0 0.005">
+        </a-ring>
+        <!-- Texto Principal DELTAR (Neon Verde) -->
+        <a-text 
+          value="DELTAR" 
+          align="center" 
+          color="#00ff00" 
+          width="5" 
+          side="double" 
+          font="kelson"
+          position="0 0 0.01">
+        </a-text>
+        <!-- Texto Sombra DELTAR (Neon Magenta - Efecto Glitch) -->
+        <a-text 
+          value="DELTAR" 
+          align="center" 
+          color="#ff007f" 
+          width="5" 
+          side="double" 
+          font="kelson"
+          position="0.02 -0.01 -0.01"
+          material="opacity: 0.6; transparent: true">
+        </a-text>
+      </a-entity>
     </a-marker>
 
     <!-- ========================================================== -->

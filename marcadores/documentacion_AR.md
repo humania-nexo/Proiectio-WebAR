@@ -25,11 +25,12 @@ Esto significa que el código "escucha" y busca códigos de barras del 1 al 6. C
     <a-text value="CAPITULO 1" position="-0.5 1.5 0"></a-text>
   </a-marker>
 
-  <!-- Marcador para el Capítulo 2 -->
+  <!-- Marcador para el Capítulo 2 (Implementado) -->
   <a-marker type="barcode" value="2">
-    <!-- Aquí irá el segundo modelo. Por ahora hay una esfera azul -->
-    <a-sphere position="0 0.5 0" radius="0.5" color="#0000FF"></a-sphere>
-    <a-text value="CAPITULO 2" position="-0.5 1.5 0"></a-text>
+    <!-- Modelo 3D de Deltar -->
+    <a-gltf-model src="modelos/deltar.glb" position="0 0.05 0" scale="1.0 1.0 1.0" drag-rotate></a-gltf-model>
+    <!-- Leyenda Hologrática DELTAR -->
+    <a-text value="DELTAR" align="center" color="#00ff00" width="5" side="double" font="kelson" position="0 1.4 0"></a-text>
   </a-marker>
 
   <!-- (Y así sucesivamente hasta el marcador value="6") -->
