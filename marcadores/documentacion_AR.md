@@ -29,8 +29,8 @@ Esto significa que el código "escucha" y busca códigos de barras del 1 al 6. C
   <a-marker type="barcode" value="2">
     <!-- Modelo 3D de Deltar -->
     <a-gltf-model src="modelos/deltar.glb" position="0 0.05 0" scale="1.0 1.0 1.0" drag-rotate></a-gltf-model>
-    <!-- Leyenda Hologrática DELTAR -->
-    <a-text value="DELTAR" align="center" color="#00ff00" width="5" side="double" font="kelson" position="0 1.4 0"></a-text>
+    <!-- Leyenda DELTAR (Verde Neón Sencillo) -->
+    <a-text value="DELTAR" position="0 1.2 0" align="center" color="#00ff00" width="5" side="double"></a-text>
   </a-marker>
 
   <!-- (Y así sucesivamente hasta el marcador value="6") -->
