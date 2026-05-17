@@ -1,83 +1,508 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
   <title>Proiectio | Realidad Aumentada (Beta)</title>
+  
+  <!-- Tipografías Premium de Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+
   <!-- A-Frame -->
   <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
   <!-- AR.js con soporte para Marcadores de Código de Barras (Matrix) -->
   <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+
+  <style>
+    :root {
+      --neon-green: #00ff00;
+      --neon-blue: #00c3ff;
+      --neon-magenta: #ff007f;
+      --glass-bg: rgba(5, 10, 5, 0.75);
+      --glass-border: rgba(0, 255, 0, 0.25);
+    }
+
+    * {
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    body {
+      margin: 0;
+      overflow: hidden;
+      font-family: 'Inter', sans-serif;
+      background-color: #000;
+    }
+
+    /* Interfaz HUD (Heads-Up Display) Estilo Sci-Fi */
+    .hud-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 10;
+      pointer-events: none; /* Permite que los clics pasen al lienzo de A-Frame */
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 20px;
+    }
+
+    /* Elementos interactivos dentro del HUD necesitan reactivar puntero */
+    .interactive {
+      pointer-events: auto;
+    }
+
+    /* Tarjeta Superior HUD */
+    .hud-header {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 8px;
+      padding: 15px 20px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      box-shadow: 0 4px 30px rgba(0, 255, 0, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 600px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .hud-title-area {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .hud-title {
+      font-family: 'Orbitron', sans-serif;
+      color: var(--neon-green);
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: 2px;
+      margin: 0;
+      text-shadow: 0 0 8px rgba(0, 255, 0, 0.4);
+    }
+
+    .hud-subtitle {
+      font-size: 10px;
+      color: #888;
+      margin: 4px 0 0 0;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .hud-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 10px;
+      color: #fff;
+      background: rgba(0, 255, 0, 0.1);
+      padding: 6px 12px;
+      border-radius: 20px;
+      border: 1px solid rgba(0, 255, 0, 0.3);
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      background-color: var(--neon-green);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--neon-green);
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0% { opacity: 0.4; }
+      50% { opacity: 1; }
+      100% { opacity: 0.4; }
+    }
+
+    /* Retícula de Escaneo Central */
+    .scanner-overlay {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 250px;
+      height: 250px;
+      border: 2px dashed rgba(0, 255, 0, 0.3);
+      border-radius: 24px;
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .scanner-overlay::before {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(to right, transparent, var(--neon-green), transparent);
+      box-shadow: 0 0 8px var(--neon-green);
+      animation: scan 3s linear infinite;
+    }
+
+    @keyframes scan {
+      0% { top: 0%; opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { top: 100%; opacity: 0; }
+    }
+
+    /* Esquinas Sci-fi del escáner */
+    .scanner-corner {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border: 3px solid var(--neon-green);
+    }
+    .top-left { top: -2px; left: -2px; border-right: none; border-bottom: none; border-top-left-radius: 12px; }
+    .top-right { top: -2px; right: -2px; border-left: none; border-bottom: none; border-top-right-radius: 12px; }
+    .bottom-left { bottom: -2px; left: -2px; border-right: none; border-top: none; border-bottom-left-radius: 12px; }
+    .bottom-right { bottom: -2px; right: -2px; border-left: none; border-top: none; border-bottom-right-radius: 12px; }
+
+    /* Tarjeta Inferior de Instrucciones */
+    .hud-footer {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 8px;
+      padding: 15px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      max-width: 600px;
+      margin: 0 auto;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .instructions-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--neon-blue);
+      letter-spacing: 1px;
+      margin: 0;
+      text-transform: uppercase;
+    }
+
+    .instructions-text {
+      font-size: 12px;
+      color: #ddd;
+      margin: 0;
+      line-height: 1.4;
+    }
+
+    .interactive-badge {
+      display: inline-block;
+      font-size: 9px;
+      font-weight: bold;
+      color: #000;
+      background: var(--neon-blue);
+      padding: 2px 6px;
+      border-radius: 3px;
+      margin-right: 5px;
+      vertical-align: middle;
+    }
+
+    /* Botón Volver a DEVA */
+    .btn-back {
+      color: var(--neon-green);
+      background: transparent;
+      border: 1px solid var(--neon-green);
+      padding: 6px 12px;
+      border-radius: 4px;
+      text-decoration: none;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 10px;
+      font-weight: bold;
+      transition: 0.3s;
+      cursor: pointer;
+      text-shadow: 0 0 5px rgba(0, 255, 0, 0.3);
+    }
+
+    .btn-back:hover {
+      background: var(--neon-green);
+      color: #000;
+      box-shadow: 0 0 10px var(--neon-green);
+    }
+
+    /* Ocultar elementos AR.js por defecto */
+    .a-enter-vr { display: none !important; }
+
+    @media (max-width: 600px) {
+      .hud-header { padding: 10px 15px; }
+      .hud-title { font-size: 12px; }
+      .scanner-overlay { width: 180px; height: 180px; }
+      .instructions-text { font-size: 11px; }
+    }
+  </style>
+
+  <script>
+    // --- COMPONENTE CUSTOM DE A-FRAME PARA ROTACIÓN TÁCTIL (DRAG ROTATE) ---
+    AFRAME.registerComponent('drag-rotate', {
+      schema: {
+        speed: { type: 'number', default: 1.5 }
+      },
+      init: function() {
+        this.ifMouseDown = false;
+        this.x_coords = 0;
+        this.y_coords = 0;
+        
+        // Bindeamos el contexto actual 'this' a los event handlers
+        this.OnDocumentMouseDown = this.OnDocumentMouseDown.bind(this);
+        this.OnDocumentMouseMove = this.OnDocumentMouseMove.bind(this);
+        this.OnDocumentMouseUp = this.OnDocumentMouseUp.bind(this);
+        this.OnDocumentTouchStart = this.OnDocumentTouchStart.bind(this);
+        this.OnDocumentTouchMove = this.OnDocumentTouchMove.bind(this);
+        this.OnDocumentTouchEnd = this.OnDocumentTouchEnd.bind(this);
+
+        // PC Events
+        document.addEventListener('mousedown', this.OnDocumentMouseDown);
+        document.addEventListener('mousemove', this.OnDocumentMouseMove);
+        document.addEventListener('mouseup', this.OnDocumentMouseUp);
+        
+        // Mobile Events
+        document.addEventListener('touchstart', this.OnDocumentTouchStart, { passive: false });
+        document.addEventListener('touchmove', this.OnDocumentTouchMove, { passive: false });
+        document.addEventListener('touchend', this.OnDocumentTouchEnd);
+      },
+      OnDocumentMouseDown: function(event) {
+        this.ifMouseDown = true;
+        this.x_coords = event.clientX;
+        this.y_coords = event.clientY;
+      },
+      OnDocumentMouseMove: function(event) {
+        if (this.ifMouseDown) {
+          // Desplazamiento del mouse en píxeles
+          const temp_x = event.clientX - this.x_coords;
+          const temp_y = event.clientY - this.y_coords;
+          
+          // Rotar horizontalmente (eje Y) y verticalmente (eje X)
+          this.el.object3D.rotation.y += temp_x * this.data.speed * 0.005;
+          this.el.object3D.rotation.x += temp_y * this.data.speed * 0.005;
+          
+          // Guardar coordenadas actuales
+          this.x_coords = event.clientX;
+          this.y_coords = event.clientY;
+        }
+      },
+      OnDocumentMouseUp: function() {
+        this.ifMouseDown = false;
+      },
+      OnDocumentTouchStart: function(event) {
+        if (event.touches.length === 1) {
+          this.ifMouseDown = true;
+          this.x_coords = event.touches[0].clientX;
+          this.y_coords = event.touches[0].clientY;
+        }
+      },
+      OnDocumentTouchMove: function(event) {
+        // Prevenir scroll de la página para que la experiencia AR no rebote
+        if (event.cancelable) event.preventDefault();
+        
+        if (this.ifMouseDown && event.touches.length === 1) {
+          const temp_x = event.touches[0].clientX - this.x_coords;
+          const temp_y = event.touches[0].clientY - this.y_coords;
+          
+          this.el.object3D.rotation.y += temp_x * this.data.speed * 0.005;
+          this.el.object3D.rotation.x += temp_y * this.data.speed * 0.005;
+          
+          this.x_coords = event.touches[0].clientX;
+          this.y_coords = event.touches[0].clientY;
+        }
+      },
+      OnDocumentTouchEnd: function() {
+        this.ifMouseDown = false;
+      },
+      remove: function() {
+        // Limpieza de event listeners al destruir el componente
+        document.removeEventListener('mousedown', this.OnDocumentMouseDown);
+        document.removeEventListener('mousemove', this.OnDocumentMouseMove);
+        document.removeEventListener('mouseup', this.OnDocumentMouseUp);
+        document.removeEventListener('touchstart', this.OnDocumentTouchStart);
+        document.removeEventListener('touchmove', this.OnDocumentTouchMove);
+        document.removeEventListener('touchend', this.OnDocumentTouchEnd);
+      }
+    });
+  </script>
 </head>
 <body style="margin: 0; overflow: hidden;">
   
-  <!-- Escena AR configurada para detectar Códigos de Barras 3x3 -->
+  <!-- INTERFAZ HUD SUPERPUESTA -->
+  <div class="hud-container">
+    <!-- Header -->
+    <div class="hud-header interactive">
+      <div class="hud-title-area">
+        <h1 class="hud-title">PROIECTIO | VISIÓN AR</h1>
+        <p class="hud-subtitle">Módulo Ojos del Alma — Lector Activo</p>
+      </div>
+      <div class="hud-status">
+        <span class="status-dot"></span>
+        <span>BIFROST ACTIVO</span>
+      </div>
+      <a href="../PROIECTIO/Web/deva/index.html" class="btn-back">< VOLVER A DEVA</a>
+    </div>
+
+    <!-- Retícula de escaneo (Guía visual) -->
+    <div class="scanner-overlay">
+      <div class="scanner-corner top-left"></div>
+      <div class="scanner-corner top-right"></div>
+      <div class="scanner-corner bottom-left"></div>
+      <div class="scanner-corner bottom-right"></div>
+    </div>
+
+    <!-- Footer de Instrucciones -->
+    <div class="hud-footer">
+      <h2 class="instructions-title">Instrucciones de Intrusión</h2>
+      <p class="instructions-text">
+        <span class="interactive-badge">TOUCH</span> Enfoca un marcador de código de barras 3x3 impreso en el libro. 
+        <b>Capítulo 1:</b> Revela la barra <i>Solaris Citrus</i>. Arrastra tu dedo o el mouse en pantalla para girar la evidencia 3D y descubrir datos ocultos.
+      </p>
+    </div>
+  </div>
+
+  <!-- ESCENA AR.JS CONFIGURADA PARA DETECTAR CÓDIGOS DE BARRAS 3x3 -->
   <a-scene 
     embedded 
     arjs="sourceType: webcam; debugUIEnabled: false; detectionMode: mono_and_matrix; matrixCodeType: 3x3;"
-    renderer="logarithmicDepthBuffer: true;"
+    renderer="logarithmicDepthBuffer: true; antialias: true;"
     vr-mode-ui="enabled: false">
     
-    <!-- ============================================== -->
-    <!-- CAPÍTULO 1 (Marcador de Código de Barras: 1)   -->
-    <!-- Placeholder: Cubo Rojo                         -->
-    <!-- ============================================== -->
+    <!-- 1. CARGA DE MODELOS 3D EN SEGUNDO PLANO -->
+    <a-assets>
+      <!-- Modelo de la Barra Solaris Citrus (Capítulo 1) -->
+      <a-asset-item id="modeloSolaris" src="modelos/solaris_citrus.glb"></a-asset-item>
+    </a-assets>
+    
+    <!-- ========================================================== -->
+    <!-- CAPÍTULO 1 (Marcador de Código de Barras: 1)                -->
+    <!-- Barra Solaris Citrus 3D Interactiva                        -->
+    <!-- ========================================================== -->
     <a-marker type="barcode" value="1">
-      <!-- Este cubo rojo será reemplazado luego por Elías Vance -->
-      <a-box position="0 0.5 0" color="#FF0000" material="opacity: 0.8; transparent: true"
-             animation="property: rotation; to: 0 360 0; loop: true; dur: 5000"></a-box>
-      <a-text value="CAPITULO 1" position="-0.5 1.5 0" color="#FF0000"></a-text>
+      <!-- 
+        Cargamos el modelo 3D de la barra Solaris.
+        - position: elevado un poco del marcador (0 0.4 0)
+        - scale: ajustamos la escala inicial (0.5 0.5 0.5) para que quepa bien en pantalla. Modificar si es necesario.
+        - drag-rotate: activa el componente custom para girar con deslizamientos.
+      -->
+      <a-gltf-model 
+        src="#modeloSolaris" 
+        position="0 0.4 0" 
+        scale="0.6 0.6 0.6"
+        drag-rotate>
+      </a-gltf-model>
+      
+      <!-- Pequeño anillo holográfico en la base del marcador -->
+      <a-ring color="#00ff00" radius-inner="0.6" radius-outer="0.7" rotation="-90 0 0"
+              material="opacity: 0.5; transparent: true"></a-ring>
+      
+      <!-- Texto flotante informativo del Capítulo 1 -->
+      <a-text value="SOLARIS CITRUS EXPLOSION" align="center" position="0 1.2 0" scale="0.5 0.5 0.5" 
+              color="#00ff00" font="monoid" width="4"></a-text>
     </a-marker>
 
-    <!-- ============================================== -->
-    <!-- CAPÍTULO 2 (Marcador de Código de Barras: 2)   -->
-    <!-- Placeholder: Esfera Azul                       -->
-    <!-- ============================================== -->
+    <!-- ========================================================== -->
+    <!-- CAPÍTULO 2 (Marcador de Código de Barras: 2)                -->
+    <!-- Placeholder: Esfera Holográfica                           -->
+    <!-- ========================================================== -->
     <a-marker type="barcode" value="2">
-      <!-- Este será el placeholder para el Cap 2 -->
-      <a-sphere position="0 0.5 0" radius="0.5" color="#0000FF" material="opacity: 0.8"
-                animation="property: position; dir: alternate; dur: 1000; to: 0 1 0; loop: true"></a-sphere>
-      <a-text value="CAPITULO 2" position="-0.5 1.5 0" color="#0000FF"></a-text>
+      <!-- Habilitamos drag-rotate también para los placeholders, así se puede probar -->
+      <a-sphere 
+        position="0 0.5 0" 
+        radius="0.5" 
+        color="#0000FF" 
+        material="opacity: 0.6; wireframe: true; transparent: true"
+        drag-rotate>
+      </a-sphere>
+      <a-ring color="#0000ff" radius-inner="0.6" radius-outer="0.7" rotation="-90 0 0"
+              material="opacity: 0.5; transparent: true"></a-ring>
+      <a-text value="CAPITULO 2 | PORTAL DETECTADO" align="center" position="0 1.2 0" scale="0.5 0.5 0.5" 
+              color="#0000FF" width="4"></a-text>
     </a-marker>
 
-    <!-- ============================================== -->
-    <!-- CAPÍTULO 3 (Marcador de Código de Barras: 3)   -->
-    <!-- Placeholder: Cilindro Verde                    -->
-    <!-- ============================================== -->
+    <!-- ========================================================== -->
+    <!-- CAPÍTULO 3 (Marcador de Código de Barras: 3)                -->
+    <!-- Placeholder: Cilindro Holográfico                         -->
+    <!-- ========================================================== -->
     <a-marker type="barcode" value="3">
-      <!-- Este será el placeholder para el Cap 3 -->
-      <a-cylinder position="0 0.5 0" radius="0.5" height="1" color="#00FF00" material="opacity: 0.8"
-                  animation="property: rotation; to: 360 360 0; loop: true; dur: 4000"></a-cylinder>
-      <a-text value="CAPITULO 3" position="-0.5 1.5 0" color="#00FF00"></a-text>
+      <a-cylinder 
+        position="0 0.5 0" 
+        radius="0.4" 
+        height="0.8" 
+        color="#00FF00" 
+        material="opacity: 0.6; wireframe: true; transparent: true"
+        drag-rotate>
+      </a-cylinder>
+      <a-ring color="#00ff00" radius-inner="0.6" radius-outer="0.7" rotation="-90 0 0"
+              material="opacity: 0.5; transparent: true"></a-ring>
+      <a-text value="CAPITULO 3 | PORTAL DETECTADO" align="center" position="0 1.2 0" scale="0.5 0.5 0.5" 
+              color="#00FF00" width="4"></a-text>
     </a-marker>
 
-    <!-- ============================================== -->
-    <!-- CAPÍTULO 4 (Marcador de Código de Barras: 4)   -->
-    <!-- Placeholder: Cono Amarillo                     -->
-    <!-- ============================================== -->
+    <!-- ========================================================== -->
+    <!-- CAPÍTULO 4 (Marcador de Código de Barras: 4)                -->
+    <!-- Placeholder: Cono Holográfico                             -->
+    <!-- ========================================================== -->
     <a-marker type="barcode" value="4">
-      <a-cone position="0 0.5 0" radius-bottom="0.5" height="1" color="#FFFF00" material="opacity: 0.8"
-              animation="property: rotation; to: 0 -360 0; loop: true; dur: 3000"></a-cone>
-      <a-text value="CAPITULO 4" position="-0.5 1.5 0" color="#FFFF00"></a-text>
+      <a-cone 
+        position="0 0.5 0" 
+        radius-bottom="0.4" 
+        height="0.8" 
+        color="#FFFF00" 
+        material="opacity: 0.6; wireframe: true; transparent: true"
+        drag-rotate>
+      </a-cone>
+      <a-ring color="#FFFF00" radius-inner="0.6" radius-outer="0.7" rotation="-90 0 0"
+              material="opacity: 0.5; transparent: true"></a-ring>
+      <a-text value="CAPITULO 4 | PORTAL DETECTADO" align="center" position="0 1.2 0" scale="0.5 0.5 0.5" 
+              color="#FFFF00" width="4"></a-text>
     </a-marker>
 
-    <!-- ============================================== -->
-    <!-- CAPÍTULO 5 (Marcador de Código de Barras: 5)   -->
-    <!-- Placeholder: Toroide Morado                    -->
-    <!-- ============================================== -->
+    <!-- ========================================================== -->
+    <!-- CAPÍTULO 5 (Marcador de Código de Barras: 5)                -->
+    <!-- Placeholder: Toroide Holográfico                           -->
+    <!-- ========================================================== -->
     <a-marker type="barcode" value="5">
-      <a-torus position="0 0.5 0" radius="0.5" radius-tubular="0.1" color="#800080" material="opacity: 0.8"
-               animation="property: rotation; to: 360 0 360; loop: true; dur: 4000"></a-torus>
-      <a-text value="CAPITULO 5" position="-0.5 1.5 0" color="#800080"></a-text>
+      <a-torus 
+        position="0 0.5 0" 
+        radius="0.4" 
+        radius-tubular="0.08" 
+        color="#800080" 
+        material="opacity: 0.6; wireframe: true; transparent: true"
+        drag-rotate>
+      </a-torus>
+      <a-ring color="#800080" radius-inner="0.6" radius-outer="0.7" rotation="-90 0 0"
+              material="opacity: 0.5; transparent: true"></a-ring>
+      <a-text value="CAPITULO 5 | PORTAL DETECTADO" align="center" position="0 1.2 0" scale="0.5 0.5 0.5" 
+              color="#800080" width="4"></a-text>
     </a-marker>
 
-    <!-- ============================================== -->
-    <!-- CAPÍTULO 6 (Marcador de Código de Barras: 6)   -->
-    <!-- Placeholder: Dodecaedro Cyan                   -->
-    <!-- ============================================== -->
+    <!-- ========================================================== -->
+    <!-- CAPÍTULO 6 (Marcador de Código de Barras: 6)                -->
+    <!-- Placeholder: Dodecaedro Holográfico                       -->
+    <!-- ========================================================== -->
     <a-marker type="barcode" value="6">
-      <a-dodecahedron position="0 0.5 0" radius="0.5" color="#00FFFF" material="opacity: 0.8"
-                      animation="property: scale; dir: alternate; dur: 1000; to: 1.2 1.2 1.2; loop: true"></a-dodecahedron>
-      <a-text value="CAPITULO 6" position="-0.5 1.5 0" color="#00FFFF"></a-text>
+      <a-dodecahedron 
+        position="0 0.5 0" 
+        radius="0.4" 
+        color="#00FFFF" 
+        material="opacity: 0.6; wireframe: true; transparent: true"
+        drag-rotate>
+      </a-dodecahedron>
+      <a-ring color="#00FFFF" radius-inner="0.6" radius-outer="0.7" rotation="-90 0 0"
+              material="opacity: 0.5; transparent: true"></a-ring>
+      <a-text value="CAPITULO 6 | PORTAL DETECTADO" align="center" position="0 1.2 0" scale="0.5 0.5 0.5" 
+              color="#00FFFF" width="4"></a-text>
     </a-marker>
 
     <!-- La cámara que ve el mundo real -->
