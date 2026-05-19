@@ -565,9 +565,14 @@
     <!-- Pantalla Holográfica: ¿Por qué borrar a los que limpian?   -->
     <!-- ========================================================== -->
     <a-marker type="barcode" value="3">
+      <!-- 
+        Proyectamos la terminal como una pantalla vertical flotante.
+        - position: 0 0.9 0 (para elevar el centro y que no choque con la mesa)
+        - rotation: 0 0 0 (se levanta verticalmente de forma perpendicular al marcador)
+      -->
       <a-plane 
-        position="0 0.6 0" 
-        rotation="-90 0 0" 
+        position="0 0.9 0" 
+        rotation="0 0 0" 
         width="1.6" 
         height="1.6" 
         material="src: #terminal-canvas; transparent: true; opacity: 0.95; shader: flat; side: double;"
