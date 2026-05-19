@@ -326,6 +326,135 @@
         window.removeEventListener('touchend', this.OnDocumentTouchEnd);
       }
     });
+
+    // --- COMPONENTE CUSTOM DE A-FRAME PARA TERMINAL DINÁMICA (DYNAMIC TERMINAL) ---
+    AFRAME.registerComponent('dynamic-terminal', {
+      init: function () {
+        const canvas = document.getElementById('terminal-canvas');
+        const ctx = canvas.getContext('2d');
+        this.canvas = canvas;
+        this.ctx = ctx;
+        this.t = 0;
+        this.draw();
+      },
+      tick: function (time, timeDelta) {
+        this.t += timeDelta;
+        this.draw();
+        
+        // Indicamos a A-Frame que la textura del canvas se ha actualizado
+        const mesh = this.el.getObject3D('mesh');
+        if (mesh && mesh.material && mesh.material.map) {
+          mesh.material.map.needsUpdate = true;
+        }
+      },
+      draw: function () {
+        const ctx = this.ctx;
+        const w = this.canvas.width;
+        const h = this.canvas.height;
+        
+        // Fondo oscuro semitransparente (efecto cristal holográfico)
+        ctx.fillStyle = 'rgba(5, 10, 8, 0.95)';
+        ctx.fillRect(0, 0, w, h);
+        
+        // Borde tecnológico neón
+        ctx.strokeStyle = 'rgba(0, 255, 128, 0.5)';
+        ctx.lineWidth = 6;
+        ctx.strokeRect(10, 10, w - 20, h - 20);
+        
+        // Esquinas neón magenta
+        ctx.strokeStyle = '#ff007f';
+        ctx.lineWidth = 10;
+        // Top-left
+        ctx.beginPath(); ctx.moveTo(35, 10); ctx.lineTo(10, 10); ctx.lineTo(10, 35); ctx.stroke();
+        // Top-right
+        ctx.beginPath(); ctx.moveTo(w - 35, 10); ctx.lineTo(w - 10, 10); ctx.lineTo(w - 10, 35); ctx.stroke();
+        // Bottom-left
+        ctx.beginPath(); ctx.moveTo(35, h - 10); ctx.lineTo(10, h - 10); ctx.lineTo(10, h - 35); ctx.stroke();
+        // Bottom-right
+        ctx.beginPath(); ctx.moveTo(w - 35, h - 10); ctx.lineTo(w - 10, h - 10); ctx.lineTo(w - 10, h - 35); ctx.stroke();
+        
+        // Efecto de líneas de escaneo (Scanlines)
+        ctx.fillStyle = 'rgba(0, 255, 128, 0.04)';
+        for (let i = 15; i < h - 15; i += 6) {
+          const offset = Math.sin(this.t * 0.0015 + i * 0.08) * 1.5;
+          ctx.fillRect(15, i + offset, w - 30, 2);
+        }
+        
+        // Interferencia aleatoria (Glitch)
+        if (Math.random() < 0.04) {
+          ctx.fillStyle = 'rgba(255, 0, 127, 0.25)';
+          ctx.fillRect(15, Math.random() * (h - 40) + 20, w - 30, Math.random() * 25);
+        }
+        
+        // Resplandor de texto neón
+        ctx.shadowColor = '#ff007f';
+        ctx.shadowBlur = 12;
+        
+        // Título de la alerta (Rosa neón)
+        ctx.fillStyle = '#ff007f';
+        ctx.font = 'bold 22px "Orbitron", monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText('CRITICAL LOGIC ERROR: 404', w / 2, 75);
+        
+        // Subtítulo del sistema (Cian neón)
+        ctx.shadowColor = '#00c3ff';
+        ctx.shadowBlur = 8;
+        ctx.fillStyle = '#00c3ff';
+        ctx.font = '14px "Orbitron", monospace';
+        ctx.fillText('SICA SECURITY DETECTED // BYPASSING...', w / 2, 115);
+        
+        // Línea divisoria técnica
+        ctx.strokeStyle = 'rgba(0, 195, 255, 0.3)';
+        ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.moveTo(40, 135); ctx.lineTo(w - 40, 135); ctx.stroke();
+        
+        // Texto del Lore en el centro (Pregunta y Mensaje)
+        ctx.shadowColor = '#ff007f';
+        ctx.shadowBlur = 10;
+        ctx.fillStyle = '#ff007f';
+        ctx.font = 'bold 20px "Courier New", Courier, monospace';
+        
+        const line1 = '¿Por qué borrar a los';
+        const line2 = 'que limpian?';
+        ctx.fillText(line1, w / 2, 195);
+        ctx.fillText(line2, w / 2, 235);
+        
+        ctx.shadowColor = '#00ff00';
+        ctx.shadowBlur = 8;
+        ctx.fillStyle = '#00ff00';
+        const line3 = 'Eso no optimiza el sistema.';
+        ctx.fillText(line3, w / 2, 305);
+        
+        // Carita triste palpitante neón
+        const pulse = Math.sin(this.t * 0.007) > 0;
+        if (pulse) {
+          ctx.shadowColor = '#ff007f';
+          ctx.shadowBlur = 18;
+          ctx.fillStyle = '#ff007f';
+        } else {
+          ctx.shadowColor = '#7f003f';
+          ctx.shadowBlur = 4;
+          ctx.fillStyle = '#7f003f';
+        }
+        ctx.font = 'bold 26px "Courier New", Courier, monospace';
+        const line4 = 'Eso duele. :(';
+        ctx.fillText(line4, w / 2, 365);
+        
+        // Reset de resplandor para textos de pie de pantalla
+        ctx.shadowBlur = 0;
+        
+        // Estado del procesador
+        ctx.fillStyle = 'rgba(0, 255, 128, 0.65)';
+        ctx.font = '11px "Orbitron", monospace';
+        ctx.fillText('NÚCLEO BETA-7 // COGNITIVE_STATE: UNSTABLE', w / 2, 440);
+        
+        // Cursor parpadeante
+        if (Math.floor(this.t / 250) % 2 === 0) {
+          ctx.fillStyle = 'rgba(0, 255, 128, 0.7)';
+          ctx.fillRect(w / 2 + 105, 348, 12, 18);
+        }
+      }
+    });
   </script>
 </head>
 <body style="margin: 0; overflow: hidden;">
@@ -378,6 +507,11 @@
     <a-entity light="type: directional; color: #ffffff; intensity: 2.5" position="2 4 -2"></a-entity>
     <a-entity light="type: directional; color: #ffffff; intensity: 1.8" position="0 -3 0"></a-entity> <!-- Luz desde abajo -->
 
+    <!-- DEFINICIÓN DE ASSETS DINÁMICOS -->
+    <a-assets>
+      <canvas id="terminal-canvas" width="512" height="512"></canvas>
+    </a-assets>
+
     <!-- ========================================================== -->
     <!-- CAPÍTULO 1 (Marcador de Código de Barras: 1)                -->
     <!-- Barra Solaris Citrus 3D Acostada y Escalada Óptimamente    -->
@@ -426,32 +560,32 @@
 
     <!-- ========================================================== -->
     <!-- CAPÍTULO 3 (Marcador de Código de Barras: 3)                -->
-    <!-- Placeholder: Cilindro Holográfico Gigante                 -->
+    <!-- Pantalla Holográfica: ¿Por qué borrar a los que limpian?   -->
     <!-- ========================================================== -->
     <a-marker type="barcode" value="3">
-      <a-cylinder 
-        position="0 0.4 0" 
-        radius="0.5" 
-        height="1.0" 
-        color="#00FF00" 
-        material="opacity: 0.6; wireframe: true; transparent: true"
+      <a-plane 
+        position="0 0.6 0" 
+        rotation="-90 0 0" 
+        width="1.6" 
+        height="1.6" 
+        material="src: #terminal-canvas; transparent: true; opacity: 0.95; shader: flat; side: double;"
+        dynamic-terminal
         drag-rotate>
-      </a-cylinder>
+      </a-plane>
     </a-marker>
 
     <!-- ========================================================== -->
     <!-- CAPÍTULO 4 (Marcador de Código de Barras: 4)                -->
-    <!-- Placeholder: Cono Holográfico Gigante                     -->
+    <!-- Modelo 3D: El Refugio de los Niños (Open Arms / Rigel)     -->
     <!-- ========================================================== -->
     <a-marker type="barcode" value="4">
-      <a-cone 
-        position="0 0.4 0" 
-        radius-bottom="0.5" 
-        height="1.0" 
-        color="#FFFF00" 
-        material="opacity: 0.6; wireframe: true; transparent: true"
+      <a-gltf-model 
+        src="modelos/open_arms.glb" 
+        position="0 0.05 0" 
+        scale="1.0 1.0 1.0"
+        rotation="0 0 0"
         drag-rotate>
-      </a-cone>
+      </a-gltf-model>
     </a-marker>
 
     <!-- ========================================================== -->
