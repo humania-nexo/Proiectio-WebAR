@@ -464,7 +464,10 @@
         count: { type: 'int', default: 70 },
         range: { type: 'number', default: 1.3 },
         speed: { type: 'number', default: 1.2 },
-        colors: { type: 'array', default: ['#ff007f', '#00c3ff', '#00ff00', '#ffffff', '#ff003c'] }
+        colors: { type: 'array', default: ['#ff007f', '#00c3ff', '#00ff00', '#ffffff', '#ff003c'] },
+        pixelSize: { type: 'number', default: 1.0 },
+        lineColor: { type: 'color', default: '#00ffcc' },
+        centerY: { type: 'number', default: 0.4 }
       },
       init: function () {
         this.pixels = [];
@@ -483,7 +486,7 @@
           const material = new THREE.MeshBasicMaterial({
             color: colors[Math.floor(Math.random() * colors.length)],
             transparent: true,
-            opacity: Math.random() * 0.7 + 0.3,
+            opacity: Math.random() * 0.75 + 0.25,
             side: THREE.DoubleSide
           });
           
@@ -498,7 +501,7 @@
             speedX: (Math.random() - 0.5) * 0.15 * this.data.speed,
             speedY: (Math.random() - 0.5) * 0.15 * this.data.speed,
             speedZ: (Math.random() - 0.5) * 0.15 * this.data.speed,
-            glitchTimer: Math.random() * 600 + 100,
+            glitchTimer: Math.random() * 500 + 50,
             rotSpeed: (Math.random() - 0.5) * 2.0
           });
         }
@@ -506,21 +509,22 @@
         // Configuración para la red de líneas vectoriales (glitch wires)
         this.lineGeometry = new THREE.BufferGeometry();
         this.lineMaterial = new THREE.LineBasicMaterial({
-          color: 0x00ffcc,
+          color: new THREE.Color(this.data.lineColor),
           transparent: true,
-          opacity: 0.25
+          opacity: 0.45
         });
         this.lineMesh = new THREE.LineSegments(this.lineGeometry, this.lineMaterial);
         this.group.add(this.lineMesh);
       },
       resetPixel: function (mesh) {
         const r = this.data.range;
+        const cy = this.data.centerY;
         mesh.position.set(
           (Math.random() - 0.5) * r,
-          (Math.random() - 0.5) * r + 0.4, // Centrado ligeramente arriba del marcador
+          (Math.random() - 0.5) * r + cy,
           (Math.random() - 0.5) * r
         );
-        const size = Math.random() * 1.5 + 0.5;
+        const size = (Math.random() * 1.5 + 0.5) * this.data.pixelSize;
         mesh.scale.set(size, size, size);
       },
       tick: function (time, timeDelta) {
@@ -546,16 +550,16 @@
           p.glitchTimer -= timeDelta;
           if (p.glitchTimer <= 0) {
             if (Math.random() < 0.6) {
-              p.mesh.position.x += (Math.random() - 0.5) * 0.15;
-              p.mesh.position.y += (Math.random() - 0.5) * 0.15;
-              p.mesh.position.z += (Math.random() - 0.5) * 0.15;
+              p.mesh.position.x += (Math.random() - 0.5) * 0.18;
+              p.mesh.position.y += (Math.random() - 0.5) * 0.18;
+              p.mesh.position.z += (Math.random() - 0.5) * 0.18;
             }
             if (Math.random() < 0.5) {
-              const burst = Math.random() * 2.2 + 0.2;
+              const burst = (Math.random() * 2.2 + 0.2) * this.data.pixelSize;
               p.mesh.scale.set(burst, burst, burst);
             }
-            p.mesh.material.opacity = Math.random() < 0.15 ? 0 : (Math.random() * 0.7 + 0.3);
-            p.glitchTimer = Math.random() * 700 + 80;
+            p.mesh.material.opacity = Math.random() < 0.2 ? 0 : (Math.random() * 0.8 + 0.2);
+            p.glitchTimer = Math.random() * 500 + 50;
           }
         });
 
@@ -702,28 +706,26 @@
     <!-- Jugador Caótico (Punto Negro y Píxeles Erráticos)          -->
     <!-- ========================================================== -->
     <a-marker type="barcode" value="7">
-      <!-- Modelo 3D del Jugador Caótico -->
+      <!-- Modelo 3D del Jugador Caótico (Escalado más grande y centrado) -->
       <a-gltf-model 
         src="modelos/jugador_caotico_low.glb" 
-        position="0 0.3 0" 
-        scale="0.3 0.3 0.3"
+        position="0 0.8 0" 
+        scale="0.8 0.8 0.8"
         rotation="0 0 0"
         animation-mixer
         drag-rotate>
       </a-gltf-model>
 
-      <!-- Enjambre de píxeles erráticos de la anomalía -->
-      <a-entity erratic-pixels="count: 90; range: 1.5; speed: 1.5"></a-entity>
-
-      <!-- Texto descriptivo flotante -->
-      <a-text 
-        value="CODULO CAOTICO" 
-        position="0 1.3 0" 
-        align="center" 
-        color="#ff007f" 
-        width="4.5" 
-        side="double">
-      </a-text>
+      <!-- Glitches erráticos de estilo bug del sistema (2 colores, grandes, cercanos) -->
+      <a-entity erratic-pixels="
+        count: 24; 
+        range: 0.55; 
+        speed: 1.8; 
+        colors: #ff007f, #ffffff; 
+        pixelSize: 4.5; 
+        lineColor: #ff007f; 
+        centerY: 0.8">
+      </a-entity>
     </a-marker>
 
     <!-- ========================================================== -->

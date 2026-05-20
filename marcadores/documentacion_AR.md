@@ -38,12 +38,18 @@ Esto significa que el código "escucha" y busca códigos de barras configurados.
 
   <!-- Marcador para el Capítulo 2 - Extra (Códulo Caótico: Jugador Caótico y Píxeles) -->
   <a-marker type="barcode" value="7">
-    <!-- Modelo 3D del Jugador Caótico -->
-    <a-gltf-model src="modelos/jugador_caotico_low.glb" position="0 0.3 0" scale="0.3 0.3 0.3" drag-rotate></a-gltf-model>
-    <!-- Enjambre de píxeles erráticos -->
-    <a-entity erratic-pixels="count: 90; range: 1.5; speed: 1.5"></a-entity>
-    <!-- Leyenda CODULO CAOTICO -->
-    <a-text value="CODULO CAOTICO" position="0 1.3 0" align="center" color="#ff007f" width="4.5" side="double"></a-text>
+    <!-- Modelo 3D del Jugador Caótico (Grande y centrado) -->
+    <a-gltf-model src="modelos/jugador_caotico_low.glb" position="0 0.8 0" scale="0.8 0.8 0.8" drag-rotate></a-gltf-model>
+    <!-- Glitches erráticos de estilo bug del sistema (2 colores, grandes, cercanos) -->
+    <a-entity erratic-pixels="
+      count: 24; 
+      range: 0.55; 
+      speed: 1.8; 
+      colors: #ff007f, #ffffff; 
+      pixelSize: 4.5; 
+      lineColor: #ff007f; 
+      centerY: 0.8">
+    </a-entity>
   </a-marker>
 
   <!-- Marcador para el Capítulo 4 (Implementado con Píxeles Erráticos) -->
