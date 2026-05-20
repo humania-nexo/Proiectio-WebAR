@@ -769,17 +769,18 @@
 
     <!-- ========================================================== -->
     <!-- CAPÍTULO 5 (Marcador de Código de Barras: 5)                -->
-    <!-- Placeholder: Toroide Holográfico Gigante                   -->
+    <!-- Modelo 3D: Valerius (Salute / Animado)                      -->
     <!-- ========================================================== -->
     <a-marker type="barcode" value="5">
-      <a-torus 
-        position="0 0.4 0" 
-        radius="0.5" 
-        radius-tubular="0.1" 
-        color="#800080" 
-        material="opacity: 0.6; wireframe: true; transparent: true"
+      <!-- Modelo animado de Valerius Saludando -->
+      <a-gltf-model 
+        src="modelos/salute_valerius.glb" 
+        position="0 0 0" 
+        scale="1.0 1.0 1.0"
+        rotation="0 0 0"
+        animation-mixer
         drag-rotate>
-      </a-torus>
+      </a-gltf-model>
     </a-marker>
 
     <!-- ========================================================== -->
