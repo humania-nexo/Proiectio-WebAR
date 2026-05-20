@@ -457,6 +457,143 @@
         }
       }
     });
+
+    // --- COMPONENTE CUSTOM DE A-FRAME PARA PÍXELES ERRÁTICOS (ERRATIC GLITCH PIXELS) ---
+    AFRAME.registerComponent('erratic-pixels', {
+      schema: {
+        count: { type: 'int', default: 70 },
+        range: { type: 'number', default: 1.3 },
+        speed: { type: 'number', default: 1.2 },
+        colors: { type: 'array', default: ['#ff007f', '#00c3ff', '#00ff00', '#ffffff', '#ff003c'] }
+      },
+      init: function () {
+        this.pixels = [];
+        this.group = new THREE.Group();
+        this.el.object3D.add(this.group);
+
+        const colors = this.data.colors.map(c => new THREE.Color(c));
+        
+        // Geometrías para tres tipos de píxeles:
+        const geomCube = new THREE.BoxGeometry(0.03, 0.03, 0.03);
+        const geomWide = new THREE.BoxGeometry(0.12, 0.015, 0.015);
+        const geomTall = new THREE.BoxGeometry(0.015, 0.12, 0.015);
+        const geometries = [geomCube, geomWide, geomTall];
+
+        for (let i = 0; i < this.data.count; i++) {
+          const material = new THREE.MeshBasicMaterial({
+            color: colors[Math.floor(Math.random() * colors.length)],
+            transparent: true,
+            opacity: Math.random() * 0.7 + 0.3,
+            side: THREE.DoubleSide
+          });
+          
+          const geom = geometries[Math.floor(Math.random() * geometries.length)];
+          const mesh = new THREE.Mesh(geom, material);
+          
+          this.resetPixel(mesh);
+          this.group.add(mesh);
+          
+          this.pixels.push({
+            mesh: mesh,
+            speedX: (Math.random() - 0.5) * 0.15 * this.data.speed,
+            speedY: (Math.random() - 0.5) * 0.15 * this.data.speed,
+            speedZ: (Math.random() - 0.5) * 0.15 * this.data.speed,
+            glitchTimer: Math.random() * 600 + 100,
+            rotSpeed: (Math.random() - 0.5) * 2.0
+          });
+        }
+
+        // Configuración para la red de líneas vectoriales (glitch wires)
+        this.lineGeometry = new THREE.BufferGeometry();
+        this.lineMaterial = new THREE.LineBasicMaterial({
+          color: 0x00ffcc,
+          transparent: true,
+          opacity: 0.25
+        });
+        this.lineMesh = new THREE.LineSegments(this.lineGeometry, this.lineMaterial);
+        this.group.add(this.lineMesh);
+      },
+      resetPixel: function (mesh) {
+        const r = this.data.range;
+        mesh.position.set(
+          (Math.random() - 0.5) * r,
+          (Math.random() - 0.5) * r + 0.4, // Centrado ligeramente arriba del marcador
+          (Math.random() - 0.5) * r
+        );
+        const size = Math.random() * 1.5 + 0.5;
+        mesh.scale.set(size, size, size);
+      },
+      tick: function (time, timeDelta) {
+        const r = this.data.range;
+        const dt = timeDelta / 1000;
+        const speed = this.data.speed;
+
+        this.pixels.forEach(p => {
+          // Movimiento
+          p.mesh.position.x += p.speedX * dt;
+          p.mesh.position.y += p.speedY * dt;
+          p.mesh.position.z += p.speedZ * dt;
+
+          // Reseteo por frontera
+          if (p.mesh.position.length() > r * 1.6) {
+            this.resetPixel(p.mesh);
+          }
+
+          // Rotación individual
+          p.mesh.rotation.y += p.rotSpeed * dt;
+
+          // Lógica de Glitch
+          p.glitchTimer -= timeDelta;
+          if (p.glitchTimer <= 0) {
+            if (Math.random() < 0.6) {
+              p.mesh.position.x += (Math.random() - 0.5) * 0.15;
+              p.mesh.position.y += (Math.random() - 0.5) * 0.15;
+              p.mesh.position.z += (Math.random() - 0.5) * 0.15;
+            }
+            if (Math.random() < 0.5) {
+              const burst = Math.random() * 2.2 + 0.2;
+              p.mesh.scale.set(burst, burst, burst);
+            }
+            p.mesh.material.opacity = Math.random() < 0.15 ? 0 : (Math.random() * 0.7 + 0.3);
+            p.glitchTimer = Math.random() * 700 + 80;
+          }
+        });
+
+        // Rotación lenta de todo el grupo
+        this.group.rotation.y += 0.004 * speed;
+        this.group.rotation.x += 0.002 * speed;
+
+        // --- Dibujado de líneas de interconexión ---
+        const positions = [];
+        const threshold = 0.35;
+        const maxConnections = 35;
+        let connections = 0;
+
+        for (let i = 0; i < this.pixels.length; i++) {
+          if (connections >= maxConnections) break;
+          const pos1 = this.pixels[i].mesh.position;
+          
+          for (let j = i + 1; j < this.pixels.length; j++) {
+            if (connections >= maxConnections) break;
+            const pos2 = this.pixels[j].mesh.position;
+            
+            const dx = pos1.x - pos2.x;
+            const dy = pos1.y - pos2.y;
+            const dz = pos1.z - pos2.z;
+            const distSq = dx*dx + dy*dy + dz*dz;
+
+            if (distSq < threshold * threshold) {
+              positions.push(pos1.x, pos1.y, pos1.z);
+              positions.push(pos2.x, pos2.y, pos2.z);
+              connections++;
+            }
+          }
+        }
+
+        this.lineGeometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+        this.lineGeometry.attributes.position.needsUpdate = true;
+      }
+    });
   </script>
 </head>
 <body style="margin: 0; overflow: hidden;">
@@ -537,7 +674,7 @@
 
     <!-- ========================================================== -->
     <!-- CAPÍTULO 2 (Marcador de Código de Barras: 2)                -->
-    <!-- Modelo Deltar GLB y Leyenda DELTAR (Verde Neón Sencillo)   -->
+    <!-- Modelo Deltar GLB y Leyenda DELTAR (Dispositivo Físico)    -->
     <!-- ========================================================== -->
     <a-marker type="barcode" value="2">
       <!-- Módulo del Modelo 3D de Deltar -->
@@ -556,6 +693,35 @@
         align="center" 
         color="#00ff00" 
         width="5" 
+        side="double">
+      </a-text>
+    </a-marker>
+
+    <!-- ========================================================== -->
+    <!-- CAPÍTULO 2 - EXTRA (Marcador de Código de Barras: 7)       -->
+    <!-- Jugador Caótico (Punto Negro y Píxeles Erráticos)          -->
+    <!-- ========================================================== -->
+    <a-marker type="barcode" value="7">
+      <!-- Modelo 3D del Jugador Caótico -->
+      <a-gltf-model 
+        src="modelos/jugador_caotico_low.glb" 
+        position="0 0.3 0" 
+        scale="0.3 0.3 0.3"
+        rotation="0 0 0"
+        animation-mixer
+        drag-rotate>
+      </a-gltf-model>
+
+      <!-- Enjambre de píxeles erráticos de la anomalía -->
+      <a-entity erratic-pixels="count: 90; range: 1.5; speed: 1.5"></a-entity>
+
+      <!-- Texto descriptivo flotante -->
+      <a-text 
+        value="CODULO CAOTICO" 
+        position="0 1.3 0" 
+        align="center" 
+        color="#ff007f" 
+        width="4.5" 
         side="double">
       </a-text>
     </a-marker>
@@ -594,6 +760,9 @@
         animation-mixer
         drag-rotate>
       </a-gltf-model>
+
+      <!-- Enjambre de píxeles erráticos y conectores vectoriales alrededor de Rigel -->
+      <a-entity erratic-pixels="count: 75; range: 1.4; speed: 1.3"></a-entity>
     </a-marker>
 
     <!-- ========================================================== -->
