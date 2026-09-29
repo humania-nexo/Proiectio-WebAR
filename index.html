@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <link rel="icon" type="image/png" href="favicon.png">
@@ -602,7 +602,7 @@
     // --- COMPONENTE CUSTOM PARA PANTALLA HOLOGRÁFICA DE VIDEO (CAPÍTULO 13) ---
     AFRAME.registerComponent('hologram-video-screen', {
       schema: {
-        videoId: { type: 'string', default: 'video-marta-cap13' }
+        videoId: { type: 'string', default: 'video-hologram-13' }
       },
       init: function() {
         this.videoEl = document.getElementById(this.data.videoId);
@@ -630,7 +630,7 @@
         this.videoEl.muted = !this.videoEl.muted;
         if (this.videoEl.paused) this.videoEl.play();
         if (this.audioBtn) {
-          this.audioBtn.innerHTML = this.videoEl.muted ? '🔇 ACTIVAR AUDIO HOLOGRÁFICO' : '🔊 AUDIO ACTIVO';
+          this.audioBtn.innerHTML = this.videoEl.muted ? '🔇 ACTIVAR AUDIO' : '🔊 AUDIO ACTIVO';
           this.audioBtn.style.borderColor = this.videoEl.muted ? 'var(--neon-blue)' : 'var(--neon-green)';
           this.audioBtn.style.color = this.videoEl.muted ? '#fff' : 'var(--neon-green)';
         }
@@ -663,9 +663,9 @@
       <div class="scanner-corner bottom-right"></div>
     </div>
 
-    <!-- Botón Flotante para Audio del Holograma (Capítulo 13) -->
-    <button id="hud-audio-toggle" class="interactive" style="display: none; position: absolute; bottom: 85px; left: 50%; transform: translateX(-50%); background: rgba(5,10,15,0.88); border: 1px solid var(--neon-blue); color: #fff; padding: 10px 22px; border-radius: 25px; font-family: 'Orbitron', sans-serif; font-size: 11px; letter-spacing: 1.5px; font-weight: bold; cursor: pointer; backdrop-filter: blur(10px); box-shadow: 0 0 15px rgba(0,195,255,0.3); z-index: 100; transition: all 0.3s;" onclick="const v = document.getElementById('video-marta-cap13'); if(v){ v.muted = !v.muted; if(v.paused) v.play(); this.innerHTML = v.muted ? '🔇 ACTIVAR AUDIO HOLOGRÁFICO' : '🔊 AUDIO ACTIVO'; this.style.borderColor = v.muted ? 'var(--neon-blue)' : 'var(--neon-green)'; this.style.color = v.muted ? '#fff' : 'var(--neon-green)'; }">
-      🔇 ACTIVAR AUDIO HOLOGRÁFICO
+    <!-- Botón Flotante para Audio del Holograma -->
+    <button id="hud-audio-toggle" class="interactive" style="display: none; position: absolute; bottom: 85px; left: 50%; transform: translateX(-50%); background: rgba(5,10,15,0.88); border: 1px solid var(--neon-blue); color: #fff; padding: 10px 22px; border-radius: 25px; font-family: 'Orbitron', sans-serif; font-size: 11px; letter-spacing: 1.5px; font-weight: bold; cursor: pointer; backdrop-filter: blur(10px); box-shadow: 0 0 15px rgba(0,195,255,0.3); z-index: 100; transition: all 0.3s;" onclick="const v = document.getElementById('video-hologram-13'); if(v){ v.muted = !v.muted; if(v.paused) v.play(); this.innerHTML = v.muted ? '🔇 ACTIVAR AUDIO' : '🔊 AUDIO ACTIVO'; this.style.borderColor = v.muted ? 'var(--neon-blue)' : 'var(--neon-green)'; this.style.color = v.muted ? '#fff' : 'var(--neon-green)'; }">
+      🔇 ACTIVAR AUDIO
     </button>
 
     <!-- Footer de Instrucciones Generales -->
@@ -697,7 +697,7 @@
     <a-assets>
       <canvas id="terminal-canvas" width="512" height="512"></canvas>
       <video 
-        id="video-marta-cap13" 
+        id="video-hologram-13" 
         src="multimedia/marta_pantalla_cap13.mp4" 
         preload="auto" 
         crossorigin="anonymous" 
@@ -997,7 +997,7 @@
 
     <!-- ========================================================== -->
     <!-- CAPÍTULO 13 (Marcador de Código de Barras: 14)              -->
-    <!-- Pantalla Holográfica: La Transmisión de Marta              -->
+    <!-- Proyección Holográfica Flotante                              -->
     <!-- ========================================================== -->
     <a-marker type="barcode" value="14">
       <!-- 1. Haz de Luz Piramidal Emisor desde el libro físico -->
@@ -1026,8 +1026,8 @@
         width="1.77" 
         height="1.0" 
         rotation="0 0 0" 
-        material="src: #video-marta-cap13; side: double; transparent: true; opacity: 0.96; shader: flat;"
-        hologram-video-screen
+        material="src: #video-hologram-13; side: double; transparent: true; opacity: 0.96; shader: flat;"
+        hologram-video-screen="videoId: video-hologram-13"
         drag-rotate>
       </a-plane>
 
@@ -1039,16 +1039,6 @@
         rotation="0 0 0" 
         material="color: #00f0ff; opacity: 0.35; wireframe: true; side: double;">
       </a-plane>
-
-      <!-- 5. Leyenda Superior Tecnológica -->
-      <a-text 
-        value="TRANSMISION // PANTALLA DE MARTA [CAP. 13]" 
-        position="0 1.68 0" 
-        align="center" 
-        color="#00ffff" 
-        width="3.8" 
-        side="double">
-      </a-text>
     </a-marker>
 
     <!-- ========================================================== -->
