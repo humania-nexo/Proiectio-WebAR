@@ -34,7 +34,7 @@ Dentro de la carpeta `marcadores/` se encuentran todos los anclajes visuales org
 | **Capítulo 10** | *El protocolo secreto* | `marcador_capitulo_10.png` | `value="11"` | Cubo Matriz Verde Neón + Leyenda 3D |
 | **Capítulo 11** | *El ritual del filo* | `marcador_capitulo_11.png` | `value="12"` | Tetraedro Carmesí Wireframe + Leyenda 3D |
 | **Capítulo 12** | *La nariz de Cyrano* | `marcador_capitulo_12.png` | `value="13"` | Anillo Orbital Púrpura + Leyenda 3D |
-| **Capítulo 13** | *El arrullo del silencio* | `marcador_capitulo_13.png` | `value="14"` | Esfera Cuántica Blanca + Leyenda 3D |
+| **Capítulo 13** | *El arrullo del silencio* | `marcador_capitulo_13.png` | `value="14"` | **Pantalla Holográfica de Video** (`multimedia/marta_pantalla_cap13.mp4` / `.webm`) + Haz Emisor Piramidal + Control de Audio en HUD |
 | **Capítulo 14** | *El protocolo de la vergüenza* | `marcador_capitulo_14.png` | `value="15"` | Cubo Naranja Wireframe + Leyenda 3D |
 | **Capítulo 15** | *El triunfo de la apatía* | `marcador_capitulo_15.png` | `value="16"` | Cilindro Gris Wireframe + Leyenda 3D |
 | **Capítulo 16** | *El teatro de la luz* | `marcador_capitulo_16.png` | `value="17"` | Cono Amarillo Dorado Wireframe + Leyenda 3D |
