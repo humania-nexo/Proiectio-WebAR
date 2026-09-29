@@ -997,47 +997,19 @@
 
     <!-- ========================================================== -->
     <!-- CAPÍTULO 13 (Marcador de Código de Barras: 14)              -->
-    <!-- Proyección Holográfica Flotante                              -->
+    <!-- Proyección Holográfica Limpia de Video                       -->
     <!-- ========================================================== -->
     <a-marker type="barcode" value="14">
-      <!-- 1. Haz de Luz Piramidal Emisor desde el libro físico -->
-      <a-cone 
-        position="0 0.5 0" 
-        radius-bottom="0.6" 
-        radius-top="0.05" 
-        height="1.0" 
-        rotation="180 0 0" 
-        material="color: #00f0ff; opacity: 0.15; transparent: true; shader: flat; side: double;">
-      </a-cone>
-
-      <!-- 2. Anillo Emisor en la Base del Marcador -->
-      <a-ring 
-        position="0 0.02 0" 
-        radius-inner="0.35" 
-        radius-outer="0.6" 
-        rotation="-90 0 0" 
-        material="color: #00e5ff; opacity: 0.7; side: double;">
-      </a-ring>
-
-      <!-- 3. Pantalla Holográfica Flotante 16:9 con Video Texture -->
+      <!-- Pantalla Holográfica Flotante 16:9 con Video Texture -->
       <a-plane 
         id="hologram-screen-cap13"
-        position="0 1.05 0" 
+        position="0 0.85 0" 
         width="1.77" 
         height="1.0" 
         rotation="0 0 0" 
-        material="src: #video-hologram-13; side: double; transparent: true; opacity: 0.96; shader: flat;"
+        material="src: #video-hologram-13; side: double; transparent: true; opacity: 0.98; shader: flat;"
         hologram-video-screen="videoId: video-hologram-13"
         drag-rotate>
-      </a-plane>
-
-      <!-- 4. Marco Neón de la Pantalla Holográfica -->
-      <a-plane 
-        position="0 1.05 -0.01" 
-        width="1.81" 
-        height="1.04" 
-        rotation="0 0 0" 
-        material="color: #00f0ff; opacity: 0.35; wireframe: true; side: double;">
       </a-plane>
     </a-marker>
 
