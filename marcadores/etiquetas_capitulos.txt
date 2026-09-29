@@ -1,38 +1,50 @@
 ================================================================================
-CLOTO // UNIVERSO PROIECTIO - REGISTRO DE ETIQUETAS, METADATA Y MARCADORES AR
+CLOTO // UNIVERSO PROIECTIO - REGISTRO OFICIAL DE ETIQUETAS Y MARCADORES (CAPS 1-30)
 ================================================================================
 
 1. ETIQUETAS GLOBALES DE PUBLICACIÓN (WATTPAD / WEB / SEO):
-cienciaficcion cyberpunk distopia simulacion misterio conspiracion thriller newadult resistencia controlmental transmedia arg cloto proiectio humania maternidad amormaternal sueños tecnologia rebelion secretos accion futurista intriga drama webar realidad-aumentada realidadvirtual inteligenciaartificial artoftheday scifi
+cienciaficcion cyberpunk distopia simulacion misterio conspiracion thriller newadult resistencia controlmental transmedia arg cloto proiectio humania maternidad amormaternal sueños tecnologia rebelion secretos accion futurista intriga drama webar realidad-aumentada realidadvirtual inteligenciaartificial artoftheday scifi leviatán marmoleros
 
-2. ETIQUETAS Y TEMAS CLAVE POR CAPÍTULO:
-- CAPÍTULO 1: El Despertar // Arcadia, simulación perfecta, pan y jazmín, Solaris Citrus, Elías Vance, despertar forzado.
-- CAPÍTULO 2: El Código Caótico // Dispositivo Deltar, armas electromagnéticas, glitch de realidad, Jugador Caótico, bug del sistema.
-- CAPÍTULO 3: La Cámara Oculta // Zora, Hana, daga sónica, ritual de acero, terminal CRT, hackers de la resistencia, dolor del sistema.
-- CAPÍTULO 4: El Refugio de los Niños // Rigel, neurodivergencia, autismo y precisión espacial, ansiedad sensorial, brazos abiertos, protección.
-- CAPÍTULO 5: El Mensaje en el Mercado // Valerius, guardia imperial, saludo militar, mercado de neón, transmisiones secretas, Solaris Amanecer.
-- CAPÍTULO 6: El Taller de los Marmoleros // Orion, rifle físico, polvo de piedra, Presidente MC, frecuencia de suministros, radio pirata.
-- CAPÍTULO 7: La Orden de la Noche // Escuadrón negro, pasos silenciosos, temblor reprimido, infiltración, puertas de madera negra.
-- CAPÍTULO 8: La Copa del Olvido // Memoria borrada, amnesia sintética, banquetes de la élite, veneno cognitivo, rescate de recuerdos.
-- CAPÍTULO 9: El Choque en la Niebla // Combate táctico, emboscada en el hangar, visores térmicos, humo electromagnético, supervivencia.
-- CAPÍTULO 10: El Protocolo Secreto // Directiva de emergencia SICA, inteligencia artificial central, código de anulación, sacrificios.
-- CAPÍTULO 11: El Ritual del Filo // Entre la Luz y la Noche, Metallica Enter Sandman, afinación de armaduras, duelo cuerpo a cuerpo.
-- CAPÍTULO 12: La Nariz de Cyrano // Filosofía del engaño, máscaras cibernéticas, teatro de la corte, revelación de identidades.
-- CAPÍTULO 13: El Arrullo del Silencio // Clímax de Cloto, canto maternal, desconexión de la red, nacimiento de una nueva conciencia.
+2. DESGLOSE DE TEMAS Y ETIQUETAS POR CAPÍTULO (1 AL 30):
+- CAPÍTULO 1: El color que se apaga // Arcadia, simulación perfecta, pan y jazmín, Solaris Citrus, Elías Vance, despertar forzado.
+- CAPÍTULO 2: El Códulo Caótico // Dispositivo Deltar, armas electromagnéticas, glitch de realidad, doble marcador.
+- CAPÍTULO 2 EXTRA: Bug del Sistema // Jugador Caótico, error de código, píxeles erráticos, glitch magenta.
+- CAPÍTULO 3: La sombra del tiempo // Zora, Hana, daga sónica, terminal CRT, hackers de la resistencia, dolor del sistema.
+- CAPÍTULO 4: El refugio de los niños perdidos // Rigel, neurodivergencia, autismo y precisión espacial, brazos abiertos.
+- CAPÍTULO 5: Los ángeles de marfil // Valerius, guardia imperial, saludo militar, mercado de neón, transmisiones secretas.
+- CAPÍTULO 6: El remix de la justicia // Orion, rifle físico, polvo de piedra, Presidente MC, radio pirata, marmoleros.
+- CAPÍTULO 7: La cosecha de los olvidados // Escuadrón negro, pasos silenciosos, infiltración, puertas de madera negra.
+- CAPÍTULO 8: La copa del olvido // Memoria borrada, amnesia sintética, banquetes de la élite, veneno cognitivo.
+- CAPÍTULO 9: El choque en la niebla // Combate táctico, emboscada en el hangar, visores térmicos, humo electromagnético.
+- CAPÍTULO 10: El protocolo secreto // Directiva de emergencia SICA, IA central, código de anulación, sacrificios.
+- CAPÍTULO 11: El ritual del filo // Entre la Luz y la Noche, Metallica Enter Sandman, duelo cuerpo a cuerpo.
+- CAPÍTULO 12: La nariz de Cyrano // Filosofía del engaño, máscaras cibernéticas, teatro de la corte.
+- CAPÍTULO 13: El arrullo del silencio // Canto maternal, desconexión de la red, nacimiento de una nueva conciencia.
+- CAPÍTULO 14: El protocolo de la vergüenza // Juicio público, censura algorítmica, humillación sintética.
+- CAPÍTULO 15: El triunfo de la apatía // Indiferencia social, soma digital, anestesia emocional.
+- CAPÍTULO 16: El teatro de la luz // Proyecciones holográficas masivas, propaganda de Arcadia, ilusión óptica.
+- CAPÍTULO 17: La escuela de las sombras // Entrenamiento clandestino, espionaje infantil, secretos enterrados.
+- CAPÍTULO 18: La fe y el sindicato // Religión algorítmica, obreros de datos, huelga de procesadores.
+- CAPÍTULO 19: La sombra de la asistente // Inteligencias auxiliares, lealtad dividida, conspiración de despacho.
+- CAPÍTULO 20: Las rutas del espectro // Túneles subcuánticos, mapas prohibidos, navegación a ciegas.
+- CAPÍTULO 21: El templo de la estética // Cirugía de identidad, cuerpos modificados, tiranía de la perfección.
+- CAPÍTULO 22: El centinela del ritmo // Orion, Mite, breakdance de combate, rítmica de 116 BPM, sobrecarga de Flow.
+- CAPÍTULO 23: Al margen de la luz // Exiliados del núcleo, periferia oscura, tecnología analógica reciclada.
+- CAPÍTULO 24: El derecho a la pesadilla // Rebelión del subconsciente, sueños no regulados, horror lúcido.
+- CAPÍTULO 25: El banquete de los dioses // Cena de los arquitectos, traición en la cúspide, desenlace de Arcadia.
+- CAPÍTULO 26: La fractura del velo // Grieta en la matriz, colapso de la simulación, transición hacia Láquesis.
+- CAPÍTULO 27: El peso de la llama // La llama inextinguible, sacrificio del portador, herencia de fuego.
+- CAPÍTULO 28: Las cenizas de Arcadia // Ruinas del domo dorado, memoria física rescatada, supervivencia pura.
+- CAPÍTULO 29: El despertar del Leviatán // La bestia de datos emerge, choque de inteligencias primordiales.
+- CAPÍTULO 30: El hilo del destino // Clímax maestro de Cloto, corte del telar, nacimiento de la libertad humana.
 
-3. MAPA DE MARCADORES DE REALIDAD AUMENTADA (BARCODE MATRIX 3X3):
-- Marcador 1 (Barcode 1)  -> Cap 1: Barra Solaris Citrus 3D
-- Marcador 2 (Barcode 2)  -> Cap 2: Dispositivo Deltar 3D
-- Marcador 7 (Barcode 7)  -> Cap 2 Extra: Jugador Caótico 3D
-- Marcador 3 (Barcode 3)  -> Cap 3: Terminal Holográfica Flotante
-- Marcador 4 (Barcode 4)  -> Cap 4: Rigel (Open Arms) 3D
-- Marcador 5 (Barcode 5)  -> Cap 5: Valerius (Salute) 3D
-- Marcador 6 (Barcode 6)  -> Cap 6: Taller Marmoleros / Dodecaedro
-- Marcador 7 (Barcode 8)  -> Cap 7: La Orden de la Noche / Octaedro Magenta
-- Marcador 8 (Barcode 9)  -> Cap 8: La Copa del Olvido / Cilindro Ámbar
-- Marcador 9 (Barcode 10) -> Cap 9: El Choque en la Niebla / Nudo Tórix Cian
-- Marcador 10 (Barcode 11) -> Cap 10: El Protocolo Secreto / Cubo Matriz Verde
-- Marcador 11 (Barcode 12) -> Cap 11: El Ritual del Filo / Tetraedro Carmesí
-- Marcador 12 (Barcode 13) -> Cap 12: La Nariz de Cyrano / Anillo Orbital Púrpura
-- Marcador 13 (Barcode 14) -> Cap 13: El Arrullo del Silencio / Esfera Cuántica Blanca
-- Marcadores 14..24 (Barcodes 15..25) -> Expansión transmedia reservada
+3. MAPA DE ASIGNACIÓN AR (BARCODE MATRIX 3X3):
+- Cap 1: Barcode 1  | Cap 2: Barcode 2  | Cap 2 Extra: Barcode 7
+- Cap 3: Barcode 3  | Cap 4: Barcode 4  | Cap 5: Barcode 5  | Cap 6: Barcode 6
+- Cap 7: Barcode 8  | Cap 8: Barcode 9  | Cap 9: Barcode 10 | Cap 10: Barcode 11
+- Cap 11: Barcode 12 | Cap 12: Barcode 13 | Cap 13: Barcode 14 | Cap 14: Barcode 15
+- Cap 15: Barcode 16 | Cap 16: Barcode 17 | Cap 17: Barcode 18 | Cap 18: Barcode 19
+- Cap 19: Barcode 20 | Cap 20: Barcode 21 | Cap 21: Barcode 22 | Cap 22: Barcode 23
+- Cap 23: Barcode 24 | Cap 24: Barcode 25 | Cap 25: Barcode 26 | Cap 26: Barcode 27
+- Cap 27: Barcode 28 | Cap 28: Barcode 29 | Cap 29: Barcode 30 | Cap 30: Barcode 31
+- Cap 31..35: Barcodes 32..36 (Reserva de Expansión)
