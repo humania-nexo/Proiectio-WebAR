@@ -610,6 +610,7 @@
         this.audioBtn = document.getElementById('hud-audio-toggle');
         
         if (this.markerEl && this.videoEl) {
+          this.videoEl.volume = 1.0;
           this.markerEl.addEventListener('markerFound', () => {
             this.videoEl.play().catch(e => console.log('Autoplay requiere interacción:', e));
             if (this.audioBtn) this.audioBtn.style.display = 'flex';
@@ -627,6 +628,7 @@
       },
       toggleAudio: function() {
         if (!this.videoEl) return;
+        this.videoEl.volume = 1.0;
         this.videoEl.muted = !this.videoEl.muted;
         if (this.videoEl.paused) this.videoEl.play();
         if (this.audioBtn) {
@@ -664,7 +666,7 @@
     </div>
 
     <!-- Botón Flotante para Audio del Holograma -->
-    <button id="hud-audio-toggle" class="interactive" style="display: none; position: absolute; bottom: 85px; left: 50%; transform: translateX(-50%); background: rgba(5,10,15,0.88); border: 1px solid var(--neon-blue); color: #fff; padding: 10px 22px; border-radius: 25px; font-family: 'Orbitron', sans-serif; font-size: 11px; letter-spacing: 1.5px; font-weight: bold; cursor: pointer; backdrop-filter: blur(10px); box-shadow: 0 0 15px rgba(0,195,255,0.3); z-index: 100; transition: all 0.3s;" onclick="const v = document.getElementById('video-hologram-13'); if(v){ v.muted = !v.muted; if(v.paused) v.play(); this.innerHTML = v.muted ? '🔇 ACTIVAR AUDIO' : '🔊 AUDIO ACTIVO'; this.style.borderColor = v.muted ? 'var(--neon-blue)' : 'var(--neon-green)'; this.style.color = v.muted ? '#fff' : 'var(--neon-green)'; }">
+    <button id="hud-audio-toggle" class="interactive" style="display: none; position: absolute; bottom: 85px; left: 50%; transform: translateX(-50%); background: rgba(5,10,15,0.88); border: 1px solid var(--neon-blue); color: #fff; padding: 10px 22px; border-radius: 25px; font-family: 'Orbitron', sans-serif; font-size: 11px; letter-spacing: 1.5px; font-weight: bold; cursor: pointer; backdrop-filter: blur(10px); box-shadow: 0 0 15px rgba(0,195,255,0.3); z-index: 100; transition: all 0.3s;" onclick="const v = document.getElementById('video-hologram-13'); if(v){ v.volume = 1.0; v.muted = !v.muted; if(v.paused) v.play(); this.innerHTML = v.muted ? '🔇 ACTIVAR AUDIO' : '🔊 AUDIO ACTIVO'; this.style.borderColor = v.muted ? 'var(--neon-blue)' : 'var(--neon-green)'; this.style.color = v.muted ? '#fff' : 'var(--neon-green)'; }">
       🔇 ACTIVAR AUDIO
     </button>
 
